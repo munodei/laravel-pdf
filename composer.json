@@ -1,37 +1,33 @@
 {
     "name": "niklasravnsborg/laravel-pdf",
-    "description": "Generate PDFs in Laravel with this mPDF wrapper.",
-    "keywords": ["mpdf", "pdf", "laravel"],
+    "description": "A simple Laravel service provider for including the mPDF library.",
+    "keywords": ["laravel", "pdf", "mpdf", "service provider"],
     "license": "MIT",
-    "scripts": {
-        "test": "phpunit --colors=always"
-    },
+    "authors": [
+        {
+            "name": "Niklas Ravnsborg",
+            "email": "mail@niklasravnsborg.de"
+        }
+    ],
     "require": {
-        "php": ">=7.0",
-        "mpdf/mpdf": "^8.0"
+        "php": "^8.2",
+        "illuminate/support": "^11.0",
+        "dompdf/dompdf": "^1.0",
+        "mpdf/mpdf": "^8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
     },
     "autoload": {
         "psr-4": {
-            "niklasravnsborg\\LaravelPdf\\": "src/LaravelPdf"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "niklasravnsborg\\LaravelPdf\\Test\\": "tests/"
+            "Niklasravnsborg\\LaravelPdf\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "niklasravnsborg\\LaravelPdf\\PdfServiceProvider"
-            ],
-            "aliases": {
-                "PDF": "niklasravnsborg\\LaravelPdf\\Facades\\Pdf"
-            }
+                "Niklasravnsborg\\LaravelPdf\\PdfServiceProvider"
+            ]
         }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.4",
-        "orchestra/testbench": "^3.7"
     }
 }

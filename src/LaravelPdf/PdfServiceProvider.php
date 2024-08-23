@@ -1,56 +1,38 @@
 <?php
 
-namespace niklasravnsborg\LaravelPdf;
+namespace Niklasravnsborg\LaravelPdf;
 
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class PdfServiceProvider extends BaseServiceProvider {
+class PdfServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->singleton('mpdf.wrapper', function ($app) {
+            return new LaravelPdfWrapper();
+        });
 
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
+        $this->app->alias('mpdf.wrapper', 'MPDF');
+    }
 
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        // Publish the configuration file
+        $this->publishes([
+            __DIR__.'/config/pdf.php' => config_path('pdf.php'),
+        ]);
 
-	/*
-	* Bootstrap the application service
-	*
-	* @return void
-	*/
-	public function boot()
-	{
-		$this->publishes([
-            	__DIR__ . '/../config/pdf.php' => config_path('pdf.php'),
-        	]);
-    	}
-	
-	/**
-	 * Register the service provider.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		$this->mergeConfigFrom(
-			__DIR__ . '/../config/pdf.php', 'pdf'
-		);
-
-		$this->app->bind('mpdf.wrapper', function($app) {
-			return new PdfWrapper();
-		});
-	}
-
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
-	public function provides()
-	{
-		return array('mpdf.pdf');
-	}
-
+        // Laravel 11: Automatically register the service provider
+        ServiceProvider::addProviderToBootstrapFile(self::class);
+    }
 }
